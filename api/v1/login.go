@@ -1,10 +1,10 @@
 package api
 
 import (
+	"gin_project/model"
+	"gin_project/model/request"
+	"gin_project/response"
 	"github.com/gin-gonic/gin"
-	"go_project/gin_project/gin_test/model"
-	"go_project/gin_project/gin_test/model/request"
-	"go_project/gin_project/gin_test/response"
 )
 
 type LoginApi struct{}
@@ -26,9 +26,9 @@ func (l *LoginApi) Login(context *gin.Context) {
 	err := context.ShouldBindJSON(&loginParams)
 	if err != nil {
 		response.FailAndMsg(err.Error(), context)
-	} else {
-		response.OkAndData(loginParams, context)
+		return
 	}
+	response.OkAndData(loginParams, context)
 }
 
 func (l *LoginApi) Register(context *gin.Context) {
@@ -37,17 +37,19 @@ func (l *LoginApi) Register(context *gin.Context) {
 	if err != nil {
 		response.FailAndMsg(err.Error(), context)
 	}
-	user := model.User{
+	user := &model.User{
 		Username: registerParams.Username,
 		Name:     registerParams.Name,
 		Password: registerParams.Password,
 		Sex:      registerParams.Sex,
+		Phone:    registerParams.Phone,
 	}
 
-	r, err := userService.RegisterService(user)
+	r, err := userService.RegisterService(*user)
 
 	if err != nil {
 		response.FailAndMsg("注册失败", context)
+		return
 	}
 	response.OkAndData(r, context)
 }

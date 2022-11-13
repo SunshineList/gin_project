@@ -1,8 +1,8 @@
 package initialize
 
 import (
+	router "gin_project/router"
 	"github.com/gin-gonic/gin"
-	router "go_project/gin_project/gin_test/router"
 )
 
 func InitRoutes() *gin.Engine {

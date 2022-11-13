@@ -1,6 +1,7 @@
 .idea/
 /web/node_modules
 /web/dist
+go.sum
 
 .DS_Store
 

@@ -1,8 +1,8 @@
 package api
 
 import (
+	"gin_project/api/v1"
 	"github.com/gin-gonic/gin"
-	"go_project/gin_project/gin_test/api/v1"
 )
 
 type UploadApi struct{}

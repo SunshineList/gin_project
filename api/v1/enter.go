@@ -1,6 +1,6 @@
 package api
 
-import "go_project/gin_project/gin_test/service"
+import "gin_project/service"
 
 type ApiGroup struct {
 	LoginApi

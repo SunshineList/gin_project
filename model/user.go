@@ -7,7 +7,7 @@ const (
 
 type User struct {
 	BaseModel         // 实现了基类model
-	Username  string  `json:"userName" gorm:"index;comment:用户登录名;not null"`
+	Username  string  `json:"username" gorm:"index;comment:用户登录名;not null"`
 	Name      string  `json:"name"`
 	Password  string  `json:"password"`
 	Sex       *uint64 `json:"sex"`

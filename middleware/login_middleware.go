@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"fmt"
+	"gin_project/response"
 	"github.com/gin-gonic/gin"
-	"go_project/gin_project/gin_test/response"
 )
 
 func TokenMiddleware() gin.HandlerFunc {
