@@ -4,23 +4,13 @@ import (
 	"gin_project/model"
 	"gin_project/model/request"
 	"gin_project/response"
+	"gin_project/utils"
 	"github.com/gin-gonic/gin"
 )
 
 type LoginApi struct{}
 
-//func checkName(fl validator.FieldLevel) bool {
-//	value := fl.Field().Interface().(string) // 反射拿到返回值
-//	if value != "admin" {
-//		return false
-//	}
-//	return true
-//}
-
 func (l *LoginApi) Login(context *gin.Context) {
-	//if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-	//	v.RegisterValidation("checkname", checkName)
-	//}
 
 	var loginParams = request.LoginParams{}
 	err := context.ShouldBindJSON(&loginParams)
@@ -28,15 +18,38 @@ func (l *LoginApi) Login(context *gin.Context) {
 		response.FailAndMsg(err.Error(), context)
 		return
 	}
-	response.OkAndData(loginParams, context)
+	user := &model.User{
+		Username: loginParams.Username,
+		Password: loginParams.Password,
+	}
+
+	if !utils.CheckCaptcha(loginParams.CaptchaId, loginParams.CaptchaVal) {
+		response.FailAndMsg("验证码错误", context)
+		return
+	}
+
+	res, err := userService.LoginService(*user)
+
+	if err != nil {
+		response.FailAndMsg(err.Error(), context)
+		return
+	}
+	response.OkAndData(res, "登录成功", context)
 }
 
 func (l *LoginApi) Register(context *gin.Context) {
 	var registerParams = request.RegisterParams{}
 	err := context.ShouldBindJSON(&registerParams)
 	if err != nil {
-		response.FailAndMsg(err.Error(), context)
+		response.FailAndMsg(utils.Translate(err), context)
+		return
 	}
+
+	if registerParams.Password != registerParams.Rpassword {
+		response.FailAndMsg("两次密码输入不一致", context)
+		return
+	}
+
 	user := &model.User{
 		Username: registerParams.Username,
 		Name:     registerParams.Name,
@@ -51,5 +64,5 @@ func (l *LoginApi) Register(context *gin.Context) {
 		response.FailAndMsg("注册失败", context)
 		return
 	}
-	response.OkAndData(r, context)
+	response.OkAndData(r, "注册成功", context)
 }
