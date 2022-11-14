@@ -5,8 +5,10 @@ package request
 */
 
 type LoginParams struct {
-	Name     string `json:"name" binding:"required,checkname"`
-	Password string `json:"password" binding:"required"`
+	Username   string `json:"username" binding:"required"`
+	Password   string `json:"password" binding:"required"`
+	CaptchaId  string `json:"captcha_id" binding:"required"`
+	CaptchaVal string `json:"captcha_val" binding:"required"`
 }
 
 /*
@@ -14,9 +16,10 @@ type LoginParams struct {
 */
 
 type RegisterParams struct {
-	Username string  `json:"username" binding:"required"`
-	Name     string  `json:"name"`
-	Password string  `json:"password" binding:"required"`
-	Sex      *uint64 `json:"sex"`
-	Phone    string  `json:"phone"`
+	Username  string  `json:"username" binding:"required"`
+	Name      string  `json:"name"`
+	Password  string  `json:"password" binding:"required"`
+	Rpassword string  `json:"rpassword" binding:"required"`
+	Sex       *uint64 `json:"sex"`
+	Phone     string  `json:"phone"`
 }

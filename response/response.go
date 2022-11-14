@@ -22,22 +22,27 @@ func Result(code int, data interface{}, msg string, content *gin.Context) {
 		Data: data,
 		Msg:  msg,
 	})
+	if code == ERROR {
+		return
+	}
 }
 
 //成功请求返回结构(带数据的)
 
-func OkAndData(data interface{}, content *gin.Context) {
-	Result(SUCCESS, data, "操作成功", content)
+func OkAndData(data interface{}, msg string, content *gin.Context) {
+	Result(SUCCESS, data, msg, content)
 }
 
 // 只返回成功信息
 
 func Ok(content *gin.Context) {
-	Result(SUCCESS, map[string]interface{}{}, "操作成功", content)
+	//Result(SUCCESS, map[string]interface{}{}, content)
+	Result(SUCCESS, nil, "操作成功", content)
 }
 
 // 失败返回结构体
 
 func FailAndMsg(msg string, content *gin.Context) {
-	Result(ERROR, map[string]interface{}{}, msg, content)
+	//Result(ERROR, map[string]interface{}{}, msg, content)
+	Result(ERROR, nil, msg, content)
 }
