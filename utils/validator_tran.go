@@ -40,7 +40,10 @@ func LoadValidatorLocal(local string) (err error) {
 }
 
 func Translate(err error) (errMsg string) {
-	errs := err.(validator.ValidationErrors)
+	errs, ok := err.(validator.ValidationErrors)
+	if !ok {
+		errMsg = err.Error()
+	}
 	for _, err := range errs {
 		errMsg = err.Translate(trans)
 		break

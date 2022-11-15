@@ -1,6 +1,7 @@
 package response
 
 import (
+	"gin_project/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -45,4 +46,13 @@ func Ok(content *gin.Context) {
 func FailAndMsg(msg string, content *gin.Context) {
 	//Result(ERROR, map[string]interface{}{}, msg, content)
 	Result(ERROR, nil, msg, content)
+}
+
+// unite handle error message
+
+func HandleReturn(err error, context *gin.Context) {
+	if err != nil {
+		FailAndMsg(utils.Translate(err), context)
+		return
+	}
 }
