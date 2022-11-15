@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gin_project/common/config"
 	"gin_project/model"
+	"gin_project/model/request"
 	"gin_project/utils"
 	"gorm.io/gorm"
 )
@@ -35,10 +36,17 @@ func (userService *UserService) LoginService(u model.User) (userInt *model.User,
 	return &user, nil
 }
 
-func (userService *UserService) GetUserById(Id any) (userInt *model.User, err error) {
+func (userService *UserService) GetUserById(Id any) (userInt *request.UserInfo, err error) {
 	var user model.User
 	if errors.Is(config.GVA_DB.Where("id = ?", Id).First(&user).Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("未找到用户")
 	}
-	return &user, err
+	res := request.UserInfo{
+		Name:     user.Name,
+		Username: user.Username,
+		Sex:      utils.ChangeSex(user.Sex),
+		Status:   utils.ChangeStatus(user.Status),
+		Phone:    user.Phone,
+	}
+	return &res, err
 }
