@@ -36,17 +36,19 @@ func (userService *UserService) LoginService(u model.User) (userInt *model.User,
 	return &user, nil
 }
 
-func (userService *UserService) GetUserById(Id any) (userInt *request.UserInfo, err error) {
+func (userService *UserService) GetUserById(Id any) (userInt interface{}, err error) {
 	var user model.User
 	if errors.Is(config.GVA_DB.Where("id = ?", Id).First(&user).Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New("未找到用户")
 	}
-	res := request.UserInfo{
-		Name:     user.Name,
-		Username: user.Username,
-		Sex:      utils.ChangeSex(user.Sex),
-		Status:   utils.ChangeStatus(user.Status),
-		Phone:    user.Phone,
-	}
-	return &res, err
+	//res := request.UserInfo{
+	//	Name:     user.Name,
+	//	Username: user.Username,
+	//	Sex:      utils.ChangeSex(user.Sex),
+	//	Status:   utils.ChangeStatus(user.Status),
+	//	Phone:    user.Phone,
+	//}
+	res := model.ToResponse(user, request.UserInfo{})
+	println(res)
+	return res, err
 }

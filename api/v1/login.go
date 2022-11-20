@@ -92,5 +92,6 @@ func (l *LoginApi) GetUserInfo(context *gin.Context) {
 		response.FailAndMsg(err.Error(), context)
 		return
 	}
+	println(user)
 	response.OkAndData(user, "查询成功", context)
 }
