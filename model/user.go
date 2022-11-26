@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 )
@@ -26,23 +27,29 @@ func (User) TableName() string {
 	return "user"
 }
 
-func ToResponse(org interface{}, new interface{}) (s interface{}) {
-	var res = map[string]interface{}{}
+func ToResponse(org interface{}, new interface{}) (s interface{}, err error) {
+	res := map[string]interface{}{}
 
 	if reflect.TypeOf(org).Kind() != reflect.Struct || reflect.TypeOf(new).Kind() != reflect.Struct {
-		fmt.Println("错误")
-		return
+		return nil, errors.New("结构错误")
 	}
 
 	n := reflect.TypeOf(new)
 	o := reflect.TypeOf(org)
 	oValue := reflect.ValueOf(org)
+	nValue := reflect.ValueOf(new)
 
 	for i := 0; i < n.NumField(); i++ {
 		var jName = n.Field(i).Tag.Get("json")
 		for k := 0; k < o.NumField(); k++ {
 			if n.Field(i).Name == o.Field(k).Name {
-				res[jName] = oValue.Field(k)
+				_, ok := n.MethodByName("Get" + n.Field(i).Name)
+				if ok {
+					args := []reflect.Value{reflect.ValueOf(fmt.Sprintf("%v", oValue.Field(k).Interface()))}
+					res[jName] = nValue.MethodByName("Get" + n.Field(i).Name).Call(args)[0].Interface()
+				} else {
+					res[jName] = oValue.Field(k).Interface()
+				}
 				break
 			} else {
 				res[jName] = nil
@@ -50,7 +57,5 @@ func ToResponse(org interface{}, new interface{}) (s interface{}) {
 		}
 	}
 
-	fmt.Printf("得到的值 %v", res)
-
-	return res
+	return res, nil
 }

@@ -48,7 +48,6 @@ func (userService *UserService) GetUserById(Id any) (userInt interface{}, err er
 	//	Status:   utils.ChangeStatus(user.Status),
 	//	Phone:    user.Phone,
 	//}
-	res := model.ToResponse(user, request.UserInfo{})
-	println(res)
+	res, err := model.ToResponse(user, request.UserInfo{})
 	return res, err
 }

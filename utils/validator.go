@@ -17,8 +17,8 @@ func CheckCaptcha(captchaId string, captchaVal string) bool {
 
 // 性别转换
 
-func ChangeSex(sex *uint64) string {
-	if *sex == 1 {
+func ChangeSex(sex string) string {
+	if sex == "1" {
 		return "男"
 	}
 	return "女"
@@ -26,8 +26,8 @@ func ChangeSex(sex *uint64) string {
 
 // 状态转换
 
-func ChangeStatus(status uint64) string {
-	if status == 1 {
+func ChangeStatus(status string) string {
+	if status == "1" {
 		return "正常"
 	}
 	return "异常"
