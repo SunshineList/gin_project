@@ -15,5 +15,6 @@ func (l *LoginApi) LoginRouters(Router *gin.RouterGroup) {
 		r.POST("/register", api.ApiGroupApp.Register)                                      //注册
 		r.GET("/getCaptcha", api.ApiGroupApp.GetCaptcha)                                   // 获取验证码
 		r.GET("/getUserInfo", middleware.JWTAuthMiddleware(), api.ApiGroupApp.GetUserInfo) // 查看当前用户信息
+		r.GET("/index", api.ApiGroupApp.TestHtml)
 	}
 }

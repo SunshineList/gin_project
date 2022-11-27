@@ -21,7 +21,10 @@ var (
 	GVA_DB *gorm.DB
 
 	//AppMode  string
-	HttpPort string
+	HttpPort  string
+	MediaUrl  string
+	RootUrl   string
+	RootMedia string
 
 	JWT_SIGN_KEY    string
 	JWT_EXPITE_TIME = time.Now().Add(7 * time.Hour).Unix()
@@ -44,4 +47,7 @@ func LoadData(file *ini.File) {
 	DB_PASSWORD = file.Section("database").Key("DB_PASSWORD").MustString("")
 	DB_NAME = file.Section("database").Key("DB_NAME").MustString("")
 	JWT_SIGN_KEY = file.Section("jwt").Key("SIGN_TOKEN").MustString("")
+	MediaUrl = file.Section("server").Key("MEDIA_ROOT").MustString("")
+	RootUrl = file.Section("server").Key("ROOT_URL").MustString("")
+	RootMedia = file.Section("server").Key("ROOT_MEDIA").MustString("")
 }

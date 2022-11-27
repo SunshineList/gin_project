@@ -1,23 +1,22 @@
 package api
 
 import (
-	"fmt"
+	"gin_project/common/config"
+	"gin_project/response"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 type UploadApi struct{}
 
 func (u *UploadApi) UploadFile(context *gin.Context) {
+	urls := []string{}
 	form, _ := context.MultipartForm()
 	files := form.File["upload[]"]
 
-	fmt.Println(files)
-
 	for _, file := range files {
-		log.Println(file.Filename)
-
-		// 上传文件到指定的路径
-		// c.SaveUploadedFile(file, dst)
+		//上传文件到指定的路径
+		context.SaveUploadedFile(file, config.MediaUrl+file.Filename)
+		urls = append(urls, config.RootMedia+file.Filename)
 	}
+	response.OkAndData(urls, "上传成功", context)
 }

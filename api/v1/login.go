@@ -9,6 +9,7 @@ import (
 	"gin_project/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"net/http"
 )
 
 type LoginApi struct{}
@@ -94,4 +95,10 @@ func (l *LoginApi) GetUserInfo(context *gin.Context) {
 	}
 	println(user)
 	response.OkAndData(user, "查询成功", context)
+}
+
+func (l *LoginApi) TestHtml(context *gin.Context) {
+	context.HTML(http.StatusOK, "index.html", gin.H{
+		"name": "hhhhhhhhh",
+	})
 }
