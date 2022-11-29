@@ -10,6 +10,7 @@ type UserInfo struct {
 	Sex      string `json:"sex"`
 	Phone    string `json:"phone"`
 	Status   string `json:"status"`
+	Avatar   string `json:"avatar"`
 }
 
 func (u UserInfo) GetSex(sex string) string {

@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"net/http"
+	"strconv"
 )
 
 type LoginApi struct{}
@@ -93,8 +94,38 @@ func (l *LoginApi) GetUserInfo(context *gin.Context) {
 		response.FailAndMsg(err.Error(), context)
 		return
 	}
-	println(user)
 	response.OkAndData(user, "查询成功", context)
+}
+
+func (l *LoginApi) UpdateUser(context *gin.Context) {
+	var updateParams = request.UpdateUserInfoParams{}
+	var userId = context.Params.ByName("id")
+	err := context.ShouldBindJSON(&updateParams)
+	if err != nil {
+		response.FailAndMsg(utils.Translate(err), context)
+		return
+	}
+
+	user_id, err := strconv.Atoi(userId)
+
+	user := &model.User{
+		BaseModel: model.BaseModel{
+			ID: uint(user_id),
+		},
+		Username: updateParams.Username,
+		Name:     updateParams.Name,
+		Avatar:   updateParams.Avatar,
+		Phone:    updateParams.Phone,
+		Sex:      updateParams.Sex,
+	}
+
+	res, err := userService.UpdateUserService(*user)
+
+	if err != nil {
+		response.FailAndMsg("更新信息失败", context)
+		return
+	}
+	response.OkAndData(res, "更新成功", context)
 }
 
 func (l *LoginApi) TestHtml(context *gin.Context) {
